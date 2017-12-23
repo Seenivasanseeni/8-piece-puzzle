@@ -1,5 +1,6 @@
 grid=[[0]*3 for i in range(3)]
 grid_sol=[[1,2,3],[4,5,6],[7,8,0]]
+prev_move=None
 def prettyPrint():
 	print("====================================")
 	global grid
@@ -44,7 +45,7 @@ def getmoves():
 
 
 def makeInformedMoves(valid_moves,i_o,j_o):
-	global grid
+	global grid,prev_move
 	#make temporary i nadj
 	min_error=1000
 	min_error_move=None
@@ -64,9 +65,17 @@ def makeInformedMoves(valid_moves,i_o,j_o):
 		error_rate=error(grid_temp)
 		#print("On making ",str((ii,jj))," <>",str((i_o,j_o)),"===",str(error_rate))
 		if(error_rate<min_error):
+			if(prev_move=="UP" and move=="DOWN"):
+				continue;
+			if(prev_move=="DOWN" and move=="UP"):
+				continue;
+			if(prev_move=="LEFT" and move=="RIGHT"):
+				continue;
+			if(prev_move=="RIGHT" and move=="LEFT"):
+				continue;
 			min_error=error_rate
 			min_error_move=move
-		
+
 	#select the move with in error
 	selected_move=min_error_move
 	print("making ",selected_move)
@@ -77,6 +86,7 @@ def makeInformedMoves(valid_moves,i_o,j_o):
 	i=ii
 	j=jj
 	grid[i][j]=0
+	prev_move=selected_move
 	return i,j
 
 while True:
