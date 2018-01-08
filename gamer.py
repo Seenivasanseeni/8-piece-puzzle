@@ -18,12 +18,31 @@ def makeGrid():
 	grid=[[8,3,5],[4,1,6],[2,7,0]]
 	grid_sol=[[1,2,3],[4,5,6],[7,8,0]]
 	return 2,2
+
+def man_distance(grid_temp,x,y):
+	#Find xi,xj
+	global grid_sol
+	for arr in grid_temp:
+		try:
+			xj=arr.index(x)
+			xi=grid_temp.index(arr)
+		except:
+			pass
+	#find yi,yj
+	for arr in grid_sol:
+		try:
+			yj=arr.index(y)
+			yi=grid_sol.index(arr)
+		except:
+			pass
+	return (xi-yi)*(xi-yi)+(xj-yj)*(xj-yj)
 def error(grid_temp):
 	global grid_sol;
 	count=0
-	for x,y in zip(grid_temp,grid_sol):
-		if(x!=y):
-			count+=1+abs(grid_sol.index(y)-grid_temp.index(x))
+	for xa,ya in zip(grid_temp,grid_sol):
+		for x,y in zip(xa,ya):
+			if(x!=y):
+				count+=1+man_distance(grid_temp,x,y)
 	if(count==0):
 		print("Reached Goal")
 		exit()
@@ -86,7 +105,6 @@ def makeInformedMoves(valid_moves,i_o,j_o):
 
 	#select the move with in error
 	index=random.randrange(0,len(min_error_move))
-	index=0
 	selected_move=min_error_move[index]
 	print("making ",selected_move)
 	i,j=i_o,j_o
@@ -108,3 +126,4 @@ while True:
 	i,j=makeInformedMoves(valid_moves,i,j)
 #	temp=input()
 	prettyPrint()
+	input()
