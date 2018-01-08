@@ -17,8 +17,10 @@ def makeGrid():
 	global grid,grid_sol
 	#curently static arrangement
 	grid=[[8,3,5],[4,1,6],[2,7,0]]
+	grid=[[1,2,3],[4,5,0],[7,8,6]]
 	grid_sol=[[1,2,3],[4,5,6],[7,8,0]]
-	return 2,2
+	return 1,2
+
 
 def man_distance(grid_temp,x,y):
 	#Find xi,xj
@@ -89,11 +91,10 @@ def solve(grid_temp,i_t,j_t,depth):
 	for que in Q.queue:
 		e,grid_cur,i,j,depth=que
 		print(e,end=" ")
-	input()
 	if(not Q.empty()):
 		e,grid_cur,i,j,depth=Q.get()
 	print("Selected error_rate:",e)
-	#input()
+	input()
 	solve(grid_cur,i,j,depth+1)
 
 
