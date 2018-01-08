@@ -24,11 +24,14 @@ def whereis(grid,x):
 
 	return i,j
 
+
+def getData():
+	grid=[ [int(i) for i in input().split(" ")] for j in range(3)]
+	return grid;
 def makeGrid():
 	global grid,grid_sol
 	#curently static arrangement
-	grid=[[8,3,5],[4,1,6],[2,7,0]]
-	grid=[[1,2,3],[4,5,6],[7,0,8]]
+	grid=getData()
 	grid_sol=[[1,2,3],[4,5,6],[7,8,0]]
 	return whereis(grid,0)
 
