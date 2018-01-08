@@ -1,16 +1,17 @@
 import random
+import queue as q
 grid=[[0]*3 for i in range(3)]
 grid_sol=[[1,2,3],[4,5,6],[7,8,0]]
 prev_move=None
-def prettyPrint():
-	print("====================================")
-	global grid
-	for i in range(3):
-		print(grid[i])
-	print("=====================================")
+Q=q.PriorityQueue()
 
-prettyPrint()
-print("grid made with zeros")
+def prettyPrint(grid):
+	print("====================================")
+	for arr in grid:
+		for i in range(3):
+			print(arr[i],end=" ")
+		print()
+	print("=====================================")
 
 def makeGrid():
 	global grid,grid_sol
@@ -36,6 +37,7 @@ def man_distance(grid_temp,x,y):
 		except:
 			pass
 	return (xi-yi)*(xi-yi)+(xj-yj)*(xj-yj)
+
 def error(grid_temp):
 	global grid_sol;
 	count=0
@@ -43,19 +45,12 @@ def error(grid_temp):
 		for x,y in zip(xa,ya):
 			if(x!=y):
 				count+=1+man_distance(grid_temp,x,y)
-	if(count==0):
-		print("Reached Goal")
-		exit()
 	return count
-
-i,j=makeGrid()
-prettyPrint()
-print("Grid made")
 
 #define moves
 moves={"UP":(-1,0),"DOWN":(1,0),"LEFT":(0,-1),"RIGHT":(0,1)}
 
-def getmoves():
+def getmoves(i,j):
 	valid_moves=[]
 	for move in moves:
 		ii=i
@@ -67,63 +62,42 @@ def getmoves():
 	return valid_moves
 
 
-def makeInformedMoves(valid_moves,i_o,j_o):
-	global grid,prev_move
-	#make temporary i nadj
-	min_error=1000
-	min_error_move=[]
+def makeMove(grid,i,j,valid_move):
+	grid_temp=[list(l) for l in grid]
+	ii=i+moves[valid_move][0]
+	jj=j+moves[valid_move][1]
+	grid_temp[i][j]=grid_temp[ii][jj]
+	grid_temp[ii][jj]=0
+	return grid_temp,ii,jj
+
+def solve(grid_temp,i_t,j_t,depth):
+	prettyPrint(grid_temp)
+	error_rate=error(grid_temp)
+	if(error_rate==0):
+		print("Reached Goal")
+		exit()
+	valid_moves=getmoves(i_t,j_t)
+	min_error=100000
+	min_details=(0,0,0)
 	for move in valid_moves:
-		i,j=i_o,j_o
-		grid_temp=list([list(l) for l in grid])
-		#do swap of values
-		ii=i+moves[move][0]
-		jj=j+moves[move][1]
-		#print(grid)
-		grid_temp[i][j]=grid_temp[ii][jj]
-		#print(grid)
-		i=ii
-		j=jj
-		grid_temp[i][j]=0
-		#print(grid)
-		error_rate=error(grid_temp)
-		#print("On making ",str((ii,jj))," <>",str((i_o,j_o)),"===",str(error_rate))
-		if(error_rate<=min_error):
-			if(prev_move=="UP" and move=="DOWN"):
-				continue;
-			if(prev_move=="DOWN" and move=="UP"):
-				continue;
-			if(prev_move=="LEFT" and move=="RIGHT"):
-				continue;
-			if(prev_move=="RIGHT" and move=="LEFT"):
-				continue;
-			min_error=error_rate
-			if(min_error==error_rate):
-				min_error_move.append(move)
-			else:
-				min_error_move=[move]
+		grid_cur,i,j=makeMove(grid_temp,i_t,j_t,move)
+		error_rate=error(grid_cur)+depth
+		print("error_rate:",error_rate)
+		Q.put((error_rate,grid_cur,i,j,depth))
 
-
-	#select the move with in error
-	index=random.randrange(0,len(min_error_move))
-	selected_move=min_error_move[index]
-	print("making ",selected_move)
-	i,j=i_o,j_o
-	ii=i+moves[selected_move][0]
-	jj=j+moves[selected_move][1]
-	grid[i][j]=grid[ii][jj]
-	i=ii
-	j=jj
-	grid[i][j]=0
-	prev_move=selected_move
-	return i,j
-
-while True:
-	#get the possible moves
-	valid_moves=getmoves()
-	print(valid_moves)
-
-	#make a move base on the informed value of number of misposition
-	i,j=makeInformedMoves(valid_moves,i,j)
-#	temp=input()
-	prettyPrint()
+	print("In queue")
+	for que in Q.queue:
+		e,grid_cur,i,j,depth=que
+		print(e,end=" ")
 	input()
+	if(not Q.empty()):
+		e,grid_cur,i,j,depth=Q.get()
+	print("Selected error_rate:",e)
+	#input()
+	solve(grid_cur,i,j,depth+1)
+
+
+i,j=makeGrid()
+prettyPrint(grid)
+print("Grid made")
+solve(grid,i,j,0)
