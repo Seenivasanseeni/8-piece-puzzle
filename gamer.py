@@ -1,5 +1,6 @@
 import random
 import queue as q
+
 grid=[[0]*3 for i in range(3)]
 grid_sol=[[1,2,3],[4,5,6],[7,8,0]]
 prev_move=None
@@ -13,13 +14,23 @@ def prettyPrint(grid):
 		print()
 	print("=====================================")
 
+def whereis(grid,x):
+	for arr in grid:
+		try:
+			j=arr.index(x)
+			i=grid.index(arr)
+		except:
+			continue
+
+	return i,j
+
 def makeGrid():
 	global grid,grid_sol
 	#curently static arrangement
 	grid=[[8,3,5],[4,1,6],[2,7,0]]
-	grid=[[1,2,3],[4,5,0],[7,8,6]]
+	grid=[[1,2,3],[4,5,6],[7,0,8]]
 	grid_sol=[[1,2,3],[4,5,6],[7,8,0]]
-	return 1,2
+	return whereis(grid,0)
 
 
 def man_distance(grid_temp,x,y):
@@ -93,7 +104,7 @@ def solve(grid_temp,i_t,j_t,depth):
 		print(e,end=" ")
 	if(not Q.empty()):
 		e,grid_cur,i,j,depth=Q.get()
-	print("Selected error_rate:",e)
+	print("\nSelected error_rate:",e)
 	input()
 	solve(grid_cur,i,j,depth+1)
 
