@@ -26,6 +26,7 @@ def whereis(grid,x):
 
 
 def getData():
+	print("Enter grid data in matrix form each row separated by space and column by newline")
 	grid=[ [int(i) for i in input().split(" ")] for j in range(3)]
 	return grid;
 def makeGrid():
@@ -98,17 +99,17 @@ def solve(grid_temp,i_t,j_t,depth):
 	for move in valid_moves:
 		grid_cur,i,j=makeMove(grid_temp,i_t,j_t,move)
 		error_rate=error(grid_cur)+depth
-		print("error_rate:",error_rate)
+		#print("error_rate:",error_rate)
 		Q.put((error_rate,grid_cur,i,j,depth))
 
-	print("In queue")
+	#print("In queue")
 	for que in Q.queue:
 		e,grid_cur,i,j,depth=que
-		print(e,end=" ")
+		#print(e,end=" ")
 	if(not Q.empty()):
 		e,grid_cur,i,j,depth=Q.get()
 	print("\nSelected error_rate:",e)
-	input()
+	input("Press any key to continue..")
 	solve(grid_cur,i,j,depth+1)
 
 
