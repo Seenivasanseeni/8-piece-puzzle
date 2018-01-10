@@ -32,8 +32,10 @@ def getData():
 def makeGrid():
 	global grid,grid_sol
 	#curently static arrangement
+	print("Enter Game grid:::")
 	grid=getData()
-	grid_sol=[[1,2,3],[4,5,6],[7,8,0]]
+	print("Enter Target Grid:::")
+	grid_sol=getData()
 	return whereis(grid,0)
 
 
