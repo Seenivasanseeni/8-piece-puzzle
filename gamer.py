@@ -55,7 +55,7 @@ def man_distance(grid_temp,x,y):
 			yi=grid_sol.index(arr)
 		except:
 			pass
-	return (xi-yi)*(xi-yi)+(xj-yj)*(xj-yj)
+	return (xi-yi)+(xj-yj)
 
 def error(grid_temp):
 	global grid_sol;
