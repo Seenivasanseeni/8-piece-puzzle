@@ -4,3 +4,5 @@ SO When entering matrix , one need to enter 0 instead of space
 To run the script python3 is needed
 To run it, Use:
 	python3 gamer.py
+
+
